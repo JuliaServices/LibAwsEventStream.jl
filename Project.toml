@@ -13,7 +13,7 @@ aws_c_event_stream_jll = "1383d23e-2ec2-5912-9712-7b5da7cfadcb"
 [compat]
 Aqua = "0.7"
 CEnum = "0.5"
-LibAwsCal = "=1.0.0"
+LibAwsCal = "=1.0.0, 1"
 LibAwsChecksums = "=1.0.0"
 LibAwsCommon = "=1.0.0"
 LibAwsIO = "=1.0.0"
