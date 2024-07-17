@@ -47,4 +47,13 @@ for name in names(@__MODULE__; all=true)
     @eval export $name
 end
 
+function init(allocator=default_aws_allocator())
+    LibAwsCommon.init(allocator)
+    LibAwsCal.init(allocator)
+    LibAwsChecksums.init(allocator)
+    LibAwsIO.init(allocator)
+    aws_event_stream_library_init(allocator)
+    return
+end
+
 end
