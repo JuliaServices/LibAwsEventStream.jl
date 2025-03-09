@@ -1799,7 +1799,13 @@ Documentation not found.
 """
 const AWS_EVENT_STREAM_HEADER_STATIC_VALUE_LEN_MAX = 16
 
-# Skipping MacroDefinition: AWS_EVENT_STREAM_PRELUDE_LENGTH ( uint32_t ) ( sizeof ( uint32_t ) + sizeof ( uint32_t ) + sizeof ( uint32_t ) )
+"""
+Documentation not found.
+"""
+const AWS_EVENT_STREAM_PRELUDE_LENGTH = uint32_t(12)
 
-# Skipping MacroDefinition: AWS_EVENT_STREAM_TRAILER_LENGTH ( uint32_t ) ( sizeof ( uint32_t ) )
+"""
+Documentation not found.
+"""
+const AWS_EVENT_STREAM_TRAILER_LENGTH = uint32_t(4)
 
