@@ -77,28 +77,28 @@ Documentation not found.
 end
 
 """
-    __JL_Ctag_206
+    union (unnamed at /home/runner/.julia/artifacts/a2319829f3da5ddaf638f084bb6ab60291947453/include/aws/event-stream/event_stream.h:96:5)
 
 Documentation not found.
 """
-struct __JL_Ctag_206
+struct var"union (unnamed at /home/runner/.julia/artifacts/a2319829f3da5ddaf638f084bb6ab60291947453/include/aws/event-stream/event_stream.h:96:5)"
     data::NTuple{16, UInt8}
 end
 
-function Base.getproperty(x::Ptr{__JL_Ctag_206}, f::Symbol)
+function Base.getproperty(x::Ptr{var"union (unnamed at /home/runner/.julia/artifacts/a2319829f3da5ddaf638f084bb6ab60291947453/include/aws/event-stream/event_stream.h:96:5)"}, f::Symbol)
     f === :variable_len_val && return Ptr{Ptr{UInt8}}(x + 0)
     f === :static_val && return Ptr{NTuple{16, UInt8}}(x + 0)
     return getfield(x, f)
 end
 
-function Base.getproperty(x::__JL_Ctag_206, f::Symbol)
-    r = Ref{__JL_Ctag_206}(x)
-    ptr = Base.unsafe_convert(Ptr{__JL_Ctag_206}, r)
+function Base.getproperty(x::var"union (unnamed at /home/runner/.julia/artifacts/a2319829f3da5ddaf638f084bb6ab60291947453/include/aws/event-stream/event_stream.h:96:5)", f::Symbol)
+    r = Ref{var"union (unnamed at /home/runner/.julia/artifacts/a2319829f3da5ddaf638f084bb6ab60291947453/include/aws/event-stream/event_stream.h:96:5)"}(x)
+    ptr = Base.unsafe_convert(Ptr{var"union (unnamed at /home/runner/.julia/artifacts/a2319829f3da5ddaf638f084bb6ab60291947453/include/aws/event-stream/event_stream.h:96:5)"}, r)
     fptr = getproperty(ptr, f)
     GC.@preserve r unsafe_load(fptr)
 end
 
-function Base.setproperty!(x::Ptr{__JL_Ctag_206}, f::Symbol, v)
+function Base.setproperty!(x::Ptr{var"union (unnamed at /home/runner/.julia/artifacts/a2319829f3da5ddaf638f084bb6ab60291947453/include/aws/event-stream/event_stream.h:96:5)"}, f::Symbol, v)
     unsafe_store!(getproperty(x, f), v)
 end
 
@@ -115,7 +115,7 @@ function Base.getproperty(x::Ptr{aws_event_stream_header_value_pair}, f::Symbol)
     f === :header_name_len && return Ptr{UInt8}(x + 0)
     f === :header_name && return Ptr{NTuple{127, Cchar}}(x + 1)
     f === :header_value_type && return Ptr{aws_event_stream_header_value_type}(x + 128)
-    f === :header_value && return Ptr{__JL_Ctag_206}(x + 136)
+    f === :header_value && return Ptr{var"union (unnamed at /home/runner/.julia/artifacts/a2319829f3da5ddaf638f084bb6ab60291947453/include/aws/event-stream/event_stream.h:96:5)"}(x + 136)
     f === :header_value_len && return Ptr{UInt16}(x + 152)
     f === :value_owned && return Ptr{Int8}(x + 154)
     return getfield(x, f)
@@ -1782,12 +1782,12 @@ const AWS_C_EVENT_STREAM_PACKAGE_ID = 4
 """
 Documentation not found.
 """
-const AWS_EVENT_STREAM_MAX_MESSAGE_SIZE = 16 * 1024 * 1024
+const AWS_EVENT_STREAM_MAX_MESSAGE_SIZE = 24 * 1024 * 1024
 
 """
 Documentation not found.
 """
-const AWS_EVENT_STREAM_MAX_HEADERS_SIZE = 128 * 1024
+const AWS_EVENT_STREAM_MAX_HEADERS_SIZE = AWS_EVENT_STREAM_MAX_MESSAGE_SIZE
 
 """
 Documentation not found.
@@ -1797,9 +1797,15 @@ const AWS_EVENT_STREAM_HEADER_NAME_LEN_MAX = INT8_MAX
 """
 Documentation not found.
 """
-const AWS_EVENT_STREAM_HEADER_STATIC_VALUE_LEN_MAX = 16
+const AWS_EVENT_STREAM_HEADER_VALUE_LEN_MAX = INT16_MAX
 
-# Skipping MacroDefinition: AWS_EVENT_STREAM_PRELUDE_LENGTH ( uint32_t ) ( sizeof ( uint32_t ) + sizeof ( uint32_t ) + sizeof ( uint32_t ) )
+"""
+Documentation not found.
+"""
+const AWS_EVENT_STREAM_PRELUDE_LENGTH = uint32_t(12)
 
-# Skipping MacroDefinition: AWS_EVENT_STREAM_TRAILER_LENGTH ( uint32_t ) ( sizeof ( uint32_t ) )
+"""
+Documentation not found.
+"""
+const AWS_EVENT_STREAM_TRAILER_LENGTH = uint32_t(4)
 

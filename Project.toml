@@ -1,6 +1,6 @@
 name = "LibAwsEventStream"
 uuid = "7707c54a-f152-44d3-a3d6-cc4209ac0b85"
-version = "1.1.0"
+version = "1.1.1"
 
 [deps]
 CEnum = "fa961155-64e5-5f13-b03f-caf6b980ea82"
@@ -17,8 +17,8 @@ LibAwsCal = "1.1"
 LibAwsChecksums = "1.1"
 LibAwsCommon = "1.2"
 LibAwsIO = "1.2"
-aws_c_event_stream_jll = "=0.4.2"
 Test = "1.11"
+aws_c_event_stream_jll = "=0.5.4"
 julia = "1.6"
 
 [extras]
