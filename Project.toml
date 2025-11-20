@@ -18,6 +18,7 @@ LibAwsChecksums = "1.1"
 LibAwsCommon = "1.2"
 LibAwsIO = "1.2"
 aws_c_event_stream_jll = "=0.4.2"
+Test = "1.11"
 julia = "1.6"
 
 [extras]
