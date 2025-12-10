@@ -1,6 +1,8 @@
 using CEnum: CEnum, @cenum
 
 const INT8_MAX = typemax(Int8)
+const INT16_MAX = typemax(Int16)
+const uint32_t = UInt32
 
 
 """
@@ -74,40 +76,6 @@ Documentation not found.
     AWS_EVENT_STREAM_HEADER_STRING = 7
     AWS_EVENT_STREAM_HEADER_TIMESTAMP = 8
     AWS_EVENT_STREAM_HEADER_UUID = 9
-end
-
-"""
-    __JL_Ctag_21
-
-Documentation not found.
-"""
-struct __JL_Ctag_21
-    data::NTuple{16, UInt8}
-end
-
-function Base.getproperty(x::Ptr{__JL_Ctag_21}, f::Symbol)
-    f === :variable_len_val && return Ptr{Ptr{UInt8}}(x + 0)
-    f === :static_val && return Ptr{NTuple{16, UInt8}}(x + 0)
-    return getfield(x, f)
-end
-
-function Base.getproperty(x::__JL_Ctag_21, f::Symbol)
-    r = Ref{__JL_Ctag_21}(x)
-    ptr = Base.unsafe_convert(Ptr{__JL_Ctag_21}, r)
-    fptr = getproperty(ptr, f)
-    GC.@preserve r unsafe_load(fptr)
-end
-
-function Base.setproperty!(x::Ptr{__JL_Ctag_21}, f::Symbol, v)
-    unsafe_store!(getproperty(x, f), v)
-end
-
-function Base.propertynames(x::__JL_Ctag_21, private::Bool = false)
-    (:variable_len_val, :static_val, if private
-            fieldnames(typeof(x))
-        else
-            ()
-        end...)
 end
 
 """
