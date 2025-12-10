@@ -1,4 +1,4 @@
-using CEnum
+using CEnum: CEnum, @cenum
 
 const INT8_MAX = typemax(Int8)
 
@@ -77,29 +77,37 @@ Documentation not found.
 end
 
 """
-    __JL_Ctag_76
+    __JL_Ctag_21
 
 Documentation not found.
 """
-struct __JL_Ctag_76
+struct __JL_Ctag_21
     data::NTuple{16, UInt8}
 end
 
-function Base.getproperty(x::Ptr{__JL_Ctag_76}, f::Symbol)
+function Base.getproperty(x::Ptr{__JL_Ctag_21}, f::Symbol)
     f === :variable_len_val && return Ptr{Ptr{UInt8}}(x + 0)
     f === :static_val && return Ptr{NTuple{16, UInt8}}(x + 0)
     return getfield(x, f)
 end
 
-function Base.getproperty(x::__JL_Ctag_76, f::Symbol)
-    r = Ref{__JL_Ctag_76}(x)
-    ptr = Base.unsafe_convert(Ptr{__JL_Ctag_76}, r)
+function Base.getproperty(x::__JL_Ctag_21, f::Symbol)
+    r = Ref{__JL_Ctag_21}(x)
+    ptr = Base.unsafe_convert(Ptr{__JL_Ctag_21}, r)
     fptr = getproperty(ptr, f)
     GC.@preserve r unsafe_load(fptr)
 end
 
-function Base.setproperty!(x::Ptr{__JL_Ctag_76}, f::Symbol, v)
+function Base.setproperty!(x::Ptr{__JL_Ctag_21}, f::Symbol, v)
     unsafe_store!(getproperty(x, f), v)
+end
+
+function Base.propertynames(x::__JL_Ctag_21, private::Bool = false)
+    (:variable_len_val, :static_val, if private
+            fieldnames(typeof(x))
+        else
+            ()
+        end...)
 end
 
 """
@@ -115,7 +123,7 @@ function Base.getproperty(x::Ptr{aws_event_stream_header_value_pair}, f::Symbol)
     f === :header_name_len && return Ptr{UInt8}(x + 0)
     f === :header_name && return Ptr{NTuple{127, Cchar}}(x + 1)
     f === :header_value_type && return Ptr{aws_event_stream_header_value_type}(x + 128)
-    f === :header_value && return Ptr{__JL_Ctag_76}(x + 136)
+    f === :header_value && return Ptr{__JL_Ctag_21}(x + 136)
     f === :header_value_len && return Ptr{UInt16}(x + 152)
     f === :value_owned && return Ptr{Int8}(x + 154)
     return getfield(x, f)
@@ -130,6 +138,14 @@ end
 
 function Base.setproperty!(x::Ptr{aws_event_stream_header_value_pair}, f::Symbol, v)
     unsafe_store!(getproperty(x, f), v)
+end
+
+function Base.propertynames(x::aws_event_stream_header_value_pair, private::Bool = false)
+    (:header_name_len, :header_name, :header_value_type, :header_value, :header_value_len, :value_owned, if private
+            fieldnames(typeof(x))
+        else
+            ()
+        end...)
 end
 
 # typedef int ( aws_event_stream_process_state_fn ) ( struct aws_event_stream_streaming_decoder * decoder , const uint8_t * data , size_t len , size_t * processed )
@@ -205,6 +221,14 @@ end
 
 function Base.setproperty!(x::Ptr{aws_event_stream_streaming_decoder}, f::Symbol, v)
     unsafe_store!(getproperty(x, f), v)
+end
+
+function Base.propertynames(x::aws_event_stream_streaming_decoder, private::Bool = false)
+    (:alloc, :working_buffer, :message_pos, :running_crc, :current_header_name_offset, :current_header_value_offset, :current_header, :prelude, :state, :on_payload, :on_prelude, :on_header, :on_complete, :on_error, :user_context, if private
+            fieldnames(typeof(x))
+        else
+            ()
+        end...)
 end
 
 """
@@ -1220,6 +1244,12 @@ Invoked when a continuation has either been closed with the TERMINATE\\_STREAM f
 """
 const aws_event_stream_rpc_client_stream_continuation_closed_fn = Cvoid
 
+# typedef void ( aws_event_stream_rpc_client_stream_continuation_terminated_fn ) ( void * user_data )
+"""
+Invoked after a continuation has been fully destroyed. Listeners know that no further callbacks are possible.
+"""
+const aws_event_stream_rpc_client_stream_continuation_terminated_fn = Cvoid
+
 """
     aws_event_stream_rpc_client_stream_continuation_options
 
@@ -1228,6 +1258,7 @@ Documentation not found.
 struct aws_event_stream_rpc_client_stream_continuation_options
     on_continuation::Ptr{aws_event_stream_rpc_client_stream_continuation_fn}
     on_continuation_closed::Ptr{aws_event_stream_rpc_client_stream_continuation_closed_fn}
+    on_continuation_terminated::Ptr{aws_event_stream_rpc_client_stream_continuation_terminated_fn}
     user_data::Ptr{Cvoid}
 end
 
@@ -1253,6 +1284,12 @@ If the attempt was successful, error\\_code will be 0 and the connection pointer
 """
 const aws_event_stream_rpc_client_on_connection_setup_fn = Cvoid
 
+# typedef void ( aws_event_stream_rpc_client_on_connection_terminated_fn ) ( void * user_data )
+"""
+Invoked when a connection has been completely destroyed.
+"""
+const aws_event_stream_rpc_client_on_connection_terminated_fn = Cvoid
+
 # typedef void ( aws_event_stream_rpc_client_message_flush_fn ) ( int error_code , void * user_data )
 """
 Invoked whenever a message has been flushed to the channel.
@@ -1273,6 +1310,7 @@ struct aws_event_stream_rpc_client_connection_options
     on_connection_setup::Ptr{aws_event_stream_rpc_client_on_connection_setup_fn}
     on_connection_protocol_message::Ptr{aws_event_stream_rpc_client_connection_protocol_message_fn}
     on_connection_shutdown::Ptr{aws_event_stream_rpc_client_on_connection_shutdown_fn}
+    on_connection_terminated::Ptr{aws_event_stream_rpc_client_on_connection_terminated_fn}
     user_data::Ptr{Cvoid}
 end
 
@@ -1360,6 +1398,20 @@ int aws_event_stream_rpc_client_connection_send_protocol_message( struct aws_eve
 """
 function aws_event_stream_rpc_client_connection_send_protocol_message(connection, message_args, flush_fn, user_data)
     ccall((:aws_event_stream_rpc_client_connection_send_protocol_message, libaws_c_event_stream), Cint, (Ptr{aws_event_stream_rpc_client_connection}, Ptr{aws_event_stream_rpc_message_args}, Ptr{aws_event_stream_rpc_client_message_flush_fn}, Ptr{Cvoid}), connection, message_args, flush_fn, user_data)
+end
+
+"""
+    aws_event_stream_rpc_client_connection_get_event_loop(connection)
+
+Returns the event loop that a connection is seated on.
+
+### Prototype
+```c
+struct aws_event_loop *aws_event_stream_rpc_client_connection_get_event_loop( const struct aws_event_stream_rpc_client_connection *connection);
+```
+"""
+function aws_event_stream_rpc_client_connection_get_event_loop(connection)
+    ccall((:aws_event_stream_rpc_client_connection_get_event_loop, libaws_c_event_stream), Ptr{aws_event_loop}, (Ptr{aws_event_stream_rpc_client_connection},), connection)
 end
 
 """
@@ -1782,12 +1834,12 @@ const AWS_C_EVENT_STREAM_PACKAGE_ID = 4
 """
 Documentation not found.
 """
-const AWS_EVENT_STREAM_MAX_MESSAGE_SIZE = 16 * 1024 * 1024
+const AWS_EVENT_STREAM_MAX_MESSAGE_SIZE = 24 * 1024 * 1024
 
 """
 Documentation not found.
 """
-const AWS_EVENT_STREAM_MAX_HEADERS_SIZE = 128 * 1024
+const AWS_EVENT_STREAM_MAX_HEADERS_SIZE = AWS_EVENT_STREAM_MAX_MESSAGE_SIZE
 
 """
 Documentation not found.
@@ -1797,9 +1849,15 @@ const AWS_EVENT_STREAM_HEADER_NAME_LEN_MAX = INT8_MAX
 """
 Documentation not found.
 """
-const AWS_EVENT_STREAM_HEADER_STATIC_VALUE_LEN_MAX = 16
+const AWS_EVENT_STREAM_HEADER_VALUE_LEN_MAX = INT16_MAX
 
-# Skipping MacroDefinition: AWS_EVENT_STREAM_PRELUDE_LENGTH ( uint32_t ) ( sizeof ( uint32_t ) + sizeof ( uint32_t ) + sizeof ( uint32_t ) )
+"""
+Documentation not found.
+"""
+const AWS_EVENT_STREAM_PRELUDE_LENGTH = uint32_t(12)
 
-# Skipping MacroDefinition: AWS_EVENT_STREAM_TRAILER_LENGTH ( uint32_t ) ( sizeof ( uint32_t ) )
+"""
+Documentation not found.
+"""
+const AWS_EVENT_STREAM_TRAILER_LENGTH = uint32_t(4)
 
