@@ -2,6 +2,7 @@ using CEnum: CEnum, @cenum
 
 const INT8_MAX = typemax(Int8)
 const INT16_MAX = typemax(Int16)
+const UINT8_MAX = typemax(UInt8)
 const uint32_t = UInt32
 
 
@@ -23,6 +24,7 @@ Documentation not found.
     AWS_ERROR_EVENT_STREAM_RPC_PROTOCOL_ERROR = 4105
     AWS_ERROR_EVENT_STREAM_RPC_STREAM_CLOSED = 4106
     AWS_ERROR_EVENT_STREAM_RPC_STREAM_NOT_ACTIVATED = 4107
+    AWS_ERROR_EVENT_STREAM_MESSAGE_TOO_MANY_HEADERS = 4108
     AWS_ERROR_EVENT_STREAM_END_RANGE = 5119
 end
 
@@ -118,16 +120,16 @@ end
 Documentation not found.
 """
 struct aws_event_stream_header_value_pair
-    data::NTuple{160, UInt8}
+    data::NTuple{288, UInt8}
 end
 
 function Base.getproperty(x::Ptr{aws_event_stream_header_value_pair}, f::Symbol)
     f === :header_name_len && return Ptr{UInt8}(x + 0)
-    f === :header_name && return Ptr{NTuple{127, Cchar}}(x + 1)
-    f === :header_value_type && return Ptr{aws_event_stream_header_value_type}(x + 128)
-    f === :header_value && return Ptr{__JL_Ctag_16}(x + 136)
-    f === :header_value_len && return Ptr{UInt16}(x + 152)
-    f === :value_owned && return Ptr{Int8}(x + 154)
+    f === :header_name && return Ptr{NTuple{255, Cchar}}(x + 1)
+    f === :header_value_type && return Ptr{aws_event_stream_header_value_type}(x + 256)
+    f === :header_value && return Ptr{__JL_Ctag_16}(x + 264)
+    f === :header_value_len && return Ptr{UInt16}(x + 280)
+    f === :value_owned && return Ptr{Int8}(x + 282)
     return getfield(x, f)
 end
 
@@ -192,7 +194,7 @@ const aws_event_stream_on_error_fn = Cvoid
 Documentation not found.
 """
 struct aws_event_stream_streaming_decoder
-    data::NTuple{288, UInt8}
+    data::NTuple{416, UInt8}
 end
 
 function Base.getproperty(x::Ptr{aws_event_stream_streaming_decoder}, f::Symbol)
@@ -203,14 +205,14 @@ function Base.getproperty(x::Ptr{aws_event_stream_streaming_decoder}, f::Symbol)
     f === :current_header_name_offset && return Ptr{Csize_t}(x + 40)
     f === :current_header_value_offset && return Ptr{Csize_t}(x + 48)
     f === :current_header && return Ptr{aws_event_stream_header_value_pair}(x + 56)
-    f === :prelude && return Ptr{aws_event_stream_message_prelude}(x + 216)
-    f === :state && return Ptr{Ptr{aws_event_stream_process_state_fn}}(x + 232)
-    f === :on_payload && return Ptr{Ptr{aws_event_stream_process_on_payload_segment_fn}}(x + 240)
-    f === :on_prelude && return Ptr{Ptr{aws_event_stream_prelude_received_fn}}(x + 248)
-    f === :on_header && return Ptr{Ptr{aws_event_stream_header_received_fn}}(x + 256)
-    f === :on_complete && return Ptr{Ptr{aws_event_stream_on_complete_fn}}(x + 264)
-    f === :on_error && return Ptr{Ptr{aws_event_stream_on_error_fn}}(x + 272)
-    f === :user_context && return Ptr{Ptr{Cvoid}}(x + 280)
+    f === :prelude && return Ptr{aws_event_stream_message_prelude}(x + 344)
+    f === :state && return Ptr{Ptr{aws_event_stream_process_state_fn}}(x + 360)
+    f === :on_payload && return Ptr{Ptr{aws_event_stream_process_on_payload_segment_fn}}(x + 368)
+    f === :on_prelude && return Ptr{Ptr{aws_event_stream_prelude_received_fn}}(x + 376)
+    f === :on_header && return Ptr{Ptr{aws_event_stream_header_received_fn}}(x + 384)
+    f === :on_complete && return Ptr{Ptr{aws_event_stream_on_complete_fn}}(x + 392)
+    f === :on_error && return Ptr{Ptr{aws_event_stream_on_error_fn}}(x + 400)
+    f === :user_context && return Ptr{Ptr{Cvoid}}(x + 408)
     return getfield(x, f)
 end
 
@@ -1389,7 +1391,7 @@ end
 
 Sends a message on the connection. These must be connection level messages (not application messages).
 
-flush\\_fn will be invoked when the message has been successfully writen to the wire or when it fails.
+flush\\_fn will be invoked when the message has been successfully written to the wire or when it fails.
 
 returns AWS\\_OP\\_SUCCESS if the message was successfully created and queued, and in that case flush\\_fn will always be invoked. Otherwise, flush\\_fn will not be invoked.
 
@@ -1682,7 +1684,7 @@ end
 """
     aws_event_stream_rpc_server_connection_from_existing_channel(server, channel, connection_options)
 
-Bypasses server, and creates a connection on an already existing channel. No connection lifetime callbacks will be invoked on the returned connection. Returns NULL if an error occurs. If and only if, you use this API, the returned connection is already ref counted and you must call [`aws_event_stream_rpc_server_connection_release`](@ref)() even if you did not explictly call [`aws_event_stream_rpc_server_connection_acquire`](@ref)()
+Bypasses server, and creates a connection on an already existing channel. No connection lifetime callbacks will be invoked on the returned connection. Returns NULL if an error occurs. If and only if, you use this API, the returned connection is already ref counted and you must call [`aws_event_stream_rpc_server_connection_release`](@ref)() even if you did not explicitly call [`aws_event_stream_rpc_server_connection_acquire`](@ref)()
 
 ### Prototype
 ```c
@@ -1846,12 +1848,17 @@ const AWS_EVENT_STREAM_MAX_HEADERS_SIZE = AWS_EVENT_STREAM_MAX_MESSAGE_SIZE
 """
 Documentation not found.
 """
-const AWS_EVENT_STREAM_HEADER_NAME_LEN_MAX = INT8_MAX
+const AWS_EVENT_STREAM_HEADER_NAME_LEN_MAX = UINT8_MAX
 
 """
 Documentation not found.
 """
 const AWS_EVENT_STREAM_HEADER_VALUE_LEN_MAX = INT16_MAX
+
+"""
+Documentation not found.
+"""
+const AWS_EVENT_STREAM_MESSAGE_MAX_HEADERS = 1024
 
 """
 Documentation not found.
